@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Amazon;
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.IO;
 using System.Text;
 
 namespace Slip.Controllers
@@ -67,7 +63,7 @@ namespace Slip.Controllers
 
 		    Sqs.SendMessageAsync(sqsMessageRequest);
             ReadSQS("Slack");
-            return Ok();
+            return Ok("sjhfakjsdbnfkjsda");
 	    }
 
         [HttpPost]
@@ -87,7 +83,7 @@ namespace Slip.Controllers
 
         public async void ReadSQS(string Source)
         {
-            var sqs = new AmazonSQSClient(RegionEndpoint.CACentral1);
+            var sqs = new AmazonSQSClient(RegionEndpoint.USWest2);
 
             var queueUrl = sqs.GetQueueUrlAsync(Source).Result.QueueUrl;
 
@@ -117,11 +113,12 @@ namespace Slip.Controllers
         public async Task PostMessageToSlackbotAsync(string messageBody)
         {
             string myJson = "{\"text\":\"" + messageBody +  "\"}";
-            using (client)
+            using (HttpClient client = new HttpClient())
             {
                 var response = await client.PostAsync(
                     "https://hooks.slack.com/services/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",
                     new StringContent(myJson, Encoding.UTF8, "application/json"));
+                Console.WriteLine(response);
             }
         }
     }
