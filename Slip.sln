@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slip", "Slip\Slip.csproj", "{8A0449A5-4B96-428E-B29B-18F53BF7051A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A0449A5-4B96-428E-B29B-18F53BF7051A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0449A5-4B96-428E-B29B-18F53BF7051A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0449A5-4B96-428E-B29B-18F53BF7051A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0449A5-4B96-428E-B29B-18F53BF7051A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56FED40F-1067-4447-8C88-C238C633E995}
+	EndGlobalSection
+EndGlobal

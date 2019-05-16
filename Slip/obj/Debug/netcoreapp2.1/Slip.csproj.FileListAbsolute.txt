@@ -1,0 +1,14 @@
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\bin\Debug\netcoreapp2.1\Slip.deps.json
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\bin\Debug\netcoreapp2.1\Slip.runtimeconfig.json
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\bin\Debug\netcoreapp2.1\Slip.runtimeconfig.dev.json
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\bin\Debug\netcoreapp2.1\Slip.dll
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.csprojAssemblyReference.cache
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.csproj.CoreCompileInputs.cache
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.RazorAssemblyInfo.cache
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.RazorAssemblyInfo.cs
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.AssemblyInfoInputs.cache
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.AssemblyInfo.cs
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.RazorTargetAssemblyInfo.cache
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\bin\Debug\netcoreapp2.1\Slip.pdb
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.dll
+D:\Personal\Learning\VC-Hackathon\Slip\Slip\obj\Debug\netcoreapp2.1\Slip.pdb
