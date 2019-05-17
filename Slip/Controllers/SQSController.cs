@@ -7,6 +7,7 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using System.Threading;
 
 namespace Slip.Controllers
 {
@@ -21,10 +22,10 @@ namespace Slip.Controllers
 
         public SQSController()
 	    {
-		    MySlackQueueUrl = "https://sqs.ca-central-1.amazonaws.com/997928571690/Slack";
-		    MyGlipQueueUrl = "https://sqs.ca-central-1.amazonaws.com/997928571690/Glip";
-			Sqs = new AmazonSQSClient(RegionEndpoint.CACentral1);
-		}
+            MySlackQueueUrl = "https://sqs.ca-central-1.amazonaws.com/608040905965/Slack";
+            MyGlipQueueUrl = "https://sqs.ca-central-1.amazonaws.com/608040905965/Glip";
+			Sqs = new AmazonSQSClient("AKIAI3DBF35TO2NJOZGA", "FFFp9svfoiDk62L8RavGFiP1/n00NfhKfkymjaD4", RegionEndpoint.CACentral1);
+        }
 
 	    [Route("createtable")]
 	    public IActionResult CreateDynamoDBTable([FromQuery] string queueName)
@@ -62,8 +63,16 @@ namespace Slip.Controllers
 		    };
 
 		    Sqs.SendMessageAsync(sqsMessageRequest);
-            ReadSQS("Slack");
-            return Ok("sjhfakjsdbnfkjsda");
+            Thread.Sleep(1000);
+            try
+            {
+                ReadSQS("Slack");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+            return Ok(body);
 	    }
 
         [HttpPost]
@@ -77,13 +86,22 @@ namespace Slip.Controllers
 		    };
 
 		    Sqs.SendMessageAsync(sqsMessageRequest);
-            ReadSQS("Glip");
+            Thread.Sleep(1000);
+            try
+            {
+                ReadSQS("Glip");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+            
             return Ok();
 		}
 
         public async void ReadSQS(string Source)
         {
-            var sqs = new AmazonSQSClient(RegionEndpoint.USWest2);
+            var sqs = new AmazonSQSClient(RegionEndpoint.CACentral1);
 
             var queueUrl = sqs.GetQueueUrlAsync(Source).Result.QueueUrl;
 
@@ -93,7 +111,14 @@ namespace Slip.Controllers
             };
 
             var receiveMessageResponse = sqs.ReceiveMessageAsync(receiveMessageRequest).Result;
-
+            while (true)
+            {
+                if (receiveMessageResponse.Messages.Count != 0)
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
             foreach (var message in receiveMessageResponse.Messages)
             {
                 Console.WriteLine($"	Body: {message.Body}");
@@ -105,7 +130,16 @@ namespace Slip.Controllers
                     QueueUrl = queueUrl,
                     ReceiptHandle = messageReceptHandle
                 };
-                PostMessageToSlackbotAsync(message.Body);
+
+                if (Source == "Slack")
+                {
+                    PostMessageToGlipAsync(message.Body);
+                }
+                else
+                {
+                    PostMessageToSlackbotAsync(message.Body);
+                }
+
                 sqs.DeleteMessageAsync(deleteRequest);
             }
         }
@@ -118,7 +152,17 @@ namespace Slip.Controllers
                 var response = await client.PostAsync(
                     "https://hooks.slack.com/services/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",
                     new StringContent(myJson, Encoding.UTF8, "application/json"));
-                Console.WriteLine(response);
+            }
+        }
+
+        public async Task PostMessageToGlipAsync(string messageBody)
+        {
+            string myJson = "{\"message\":\"" + messageBody + "\"}";
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.PostAsync(
+                    "https://54.188.121.149:8443/api",
+                    new StringContent(myJson, Encoding.UTF8, "application/json"));
             }
         }
     }
