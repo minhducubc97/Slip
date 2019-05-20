@@ -6,7 +6,10 @@ using Amazon;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace Slip.Controllers
 {
@@ -63,7 +66,7 @@ namespace Slip.Controllers
 
 		    Sqs.SendMessageAsync(sqsMessageRequest);
             ReadSQS("Slack");
-            return Ok("sjhfakjsdbnfkjsda");
+            return Ok();
 	    }
 
         [HttpPost]
@@ -83,7 +86,7 @@ namespace Slip.Controllers
 
         public async void ReadSQS(string Source)
         {
-            var sqs = new AmazonSQSClient(RegionEndpoint.USWest2);
+            var sqs = new AmazonSQSClient(RegionEndpoint.CACentral1);
 
             var queueUrl = sqs.GetQueueUrlAsync(Source).Result.QueueUrl;
 
@@ -91,23 +94,36 @@ namespace Slip.Controllers
             {
                 QueueUrl = queueUrl
             };
-
+			
             var receiveMessageResponse = sqs.ReceiveMessageAsync(receiveMessageRequest).Result;
 
-            foreach (var message in receiveMessageResponse.Messages)
-            {
-                Console.WriteLine($"	Body: {message.Body}");
+	        while (receiveMessageResponse.Messages.Count != 0)
+	        {
+		        break;
+	        }
+			
+			foreach (var message in receiveMessageResponse.Messages)
+			{
+				Console.WriteLine($"	Body: {message.Body}");
 
-                var messageReceptHandle = receiveMessageResponse.Messages.FirstOrDefault()?.ReceiptHandle;
+				var messageReceptHandle = receiveMessageResponse.Messages.FirstOrDefault()?.ReceiptHandle;
 
-                var deleteRequest = new DeleteMessageRequest
-                {
-                    QueueUrl = queueUrl,
-                    ReceiptHandle = messageReceptHandle
-                };
-                PostMessageToSlackbotAsync(message.Body);
-                sqs.DeleteMessageAsync(deleteRequest);
-            }
+				var deleteRequest = new DeleteMessageRequest
+				{
+					QueueUrl = queueUrl,
+					ReceiptHandle = messageReceptHandle
+				};
+
+				if (Source.Equals("Slack"))
+				{
+					PostMessageToGlipbotAsync(message.Body);
+				}
+				else if (Source.Equals("Glip"))
+				{
+					PostMessageToSlackbotAsync(message.Body);
+				}
+				sqs.DeleteMessageAsync(deleteRequest);
+			}
         }
 
         public async Task PostMessageToSlackbotAsync(string messageBody)
@@ -118,8 +134,18 @@ namespace Slip.Controllers
                 var response = await client.PostAsync(
                     "https://hooks.slack.com/services/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",
                     new StringContent(myJson, Encoding.UTF8, "application/json"));
-                Console.WriteLine(response);
             }
         }
-    }
+
+	    public async Task PostMessageToGlipbotAsync(string messageBody)
+	    {
+		    string myJson = "{\"message\":\"" + messageBody + "\"}";
+		    using (HttpClient client = new HttpClient())
+		    {
+			    var response = await client.PostAsync(
+					"https://54.188.121.149:8080/api",
+				    new StringContent(myJson, Encoding.UTF8, "application/json"));
+		    }
+	    }
+	}
 }
