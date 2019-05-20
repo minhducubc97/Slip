@@ -29,8 +29,8 @@ namespace Slip.Controllers
 			Sqs = new AmazonSQSClient(RegionEndpoint.CACentral1);
 		}
 
-	    [Route("createtable")]
-	    public IActionResult CreateDynamoDBTable([FromQuery] string queueName)
+	    [Route("createqueue")]
+	    public IActionResult CreateSQSQueue([FromQuery] string queueName)
 	    {
 			Console.WriteLine("********************************************");
 		    Console.WriteLine("Amazon SQS");
